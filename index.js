@@ -1,5 +1,5 @@
 const Discord = require('discord.js')
-const { Client, GatewayIntentBits, ApplicationCommandType, ApplicationCommandOptionType } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder, ApplicationCommandType, ApplicationCommandOptionType, MessageAttachment } = require('discord.js');
 const fs = require("fs");
 const { inspect } = require('util');
 const path = require('path');
@@ -50,7 +50,40 @@ client.on("ready", () => {
         }],
     });
 
+    commands.create({
+    	name: 'invite',
+	description: 'Sends bot\'s invite link',
+    })
+
 });
+
+client.on('ready', async (ready) => {
+  setInterval(() => {
+    let currentTime = new Date();
+    let currentOffset = currentTime.getTimezoneOffset();
+    let ISTOffset = 330;   // IST offset UTC +5:30 
+
+    let ISTTime = new Date(currentTime.getTime() + (ISTOffset + currentOffset) * 60000);
+    var hoursIST = ISTTime.getHours()
+    var minutesIST = ISTTime.getMinutes()
+    console.log(hoursIST + ':' + minutesIST)
+    if (hoursIST === 22 && minutesIST === 00) {
+
+      const getYoutubeSubscriber = require('getyoutubesubscriber')
+      getYoutubeSubscriber('UCC1yT9JzYwz6dDwLM-KWt0A').then((data) => {
+        let te = new EmbedBuilder()
+          .setTitle("DemonKingSwarn's Subscribers")
+          .setURL("https://www.youtube.com/channel/UCC1yT9JzYwz6dDwLM-KWt0A?view_as=subscriber")
+          .setDescription(data.toLocaleString() + " Subscribers\n[Click Here To Subscribe](https://www.youtube.com/channel/UCC1yT9JzYwz6dDwLM-KWt0A?view_as=subscriber)")
+          .setThumbnail("https://media.discordapp.net/attachments/832647534782447640/856085000490057778/DemonLogo-3.jpg?width=613&height=613")
+          .setImage("https://media.discordapp.net/attachments/739345467199979572/775411393976598558/unknown.png")
+          .setFooter({text: "SUBSCRIBE NOW IF YOU DIDN'T, IT'S FREE!!!"})
+        client.channels.cache.get("696719583461113936").send({embeds: [te]})
+      });
+    }
+  }, 60000)
+
+})
 
 
 client.on("messageCreate", async message => {
@@ -85,6 +118,11 @@ client.on("interactionCreate", async (interaction) => {
         interaction.reply({
             content: `${toSay}`
         })
+    } else if ( commandName === "invite" ) {
+    	interaction.reply({
+		content: "https://discord.com/api/oauth2/authorize?client_id=739347625374908551&permissions=8&scope=bot",
+		ephemeral: true,
+	})
     }
 })
 

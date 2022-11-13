@@ -9,7 +9,7 @@ exports.run = (client, message, args) => {
 	.setDescription(" ")
     .addFields(
         {name: "Normal Commands", value: commands},
-        {name: "Slash Commands", value: "ping, say"},
+        {name: "Slash Commands", value: "ping, say, invite"},
     )
     .setTimestamp()
     .setFooter({ text: "My prefix is -", iconURL: `${client.user.displayAvatarURL({dynamic: true})}` })
